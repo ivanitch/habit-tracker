@@ -1,9 +1,19 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Habit
 
 
 class HabitSerializer(serializers.ModelSerializer):
+    time = serializers.TimeField(format='%H:%M', input_formats=['%H:%M'])
+    validators = [
+        UniqueTogetherValidator(
+            queryset=Habit.objects.all(),
+            fields=['user', 'action', 'time', 'place'],
+            message="У вас уже запланирована точно такая же привычка на это время и место."
+        )
+    ]
+
     class Meta:
         model = Habit
         fields = '__all__'
