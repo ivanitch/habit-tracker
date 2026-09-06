@@ -1,22 +1,24 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-
 from .models import Habit
 
 
 class HabitSerializer(serializers.ModelSerializer):
     time = serializers.TimeField(format='%H:%M', input_formats=['%H:%M'])
-    validators = [
-        UniqueTogetherValidator(
-            queryset=Habit.objects.all(),
-            fields=['user', 'action', 'time', 'place'],
-            message="У вас уже запланирована точно такая же привычка на это время и место."
-        )
-    ]
+
+    # Скрытое поле, которое автоматически берет пользователя из request.user
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Habit
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Habit.objects.all(),
+                fields=['user', 'action', 'time', 'place'],
+                message="У вас уже запланирована точно такая же привычка на это время и место."
+            )
+        ]
 
     def validate_duration(self, value):
         if value > 120:
@@ -24,8 +26,10 @@ class HabitSerializer(serializers.ModelSerializer):
         return value
 
     def validate_periodicity(self, value):
-        if value > 7 or value < 1:
+        if value < 1:
             raise serializers.ValidationError("Привычку нельзя выполнять реже 1 раза в 7 дней.")
+        elif value > 7:
+            raise serializers.ValidationError("Привычку нельзя выполнять чаще 7 дней.")
         return value
 
     def validate_linked_habit(self, value):
