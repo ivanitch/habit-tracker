@@ -5,9 +5,19 @@ description = "Habit Tracker — трекер привычек"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "celery>=5.6.3",
+    "coverage>=7.15.4",
     "django>=6.1",
+    "django-filter>=26.1",
     "djangorestframework>=3.18.0",
+    "djangorestframework-simplejwt>=5.5.1",
+    "django-cors-headers>=4.9.0",
     "ipython>=9.17.0",
     "psycopg>=3.3.4",
     "python-dotenv>=1.2.3",
+    "pillow>=12.3.0",
+    "drf-spectacular>=0.30.0",
+    "requests>=2.34.2",
+    "redis>=8.1.0",
+    "django-celery-beat>=2.1.0",
 ]
