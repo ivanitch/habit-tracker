@@ -16,8 +16,8 @@ class HabitViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
-        # Пользователь видит только свои привычки
-        return Habit.objects.filter(user=self.request.user)
+        # Пользователь видит только свои опубликованные привычки
+        return Habit.objects.filter(user=self.request.user, is_public=True)
 
     def perform_create(self, serializer):
         # Автоматическая привязка создателя к привычке

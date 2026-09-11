@@ -35,6 +35,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
 
+    telegram_chat_id = models.CharField(max_length=255, blank=True, null=True, verbose_name='ID чата Telegram')
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
